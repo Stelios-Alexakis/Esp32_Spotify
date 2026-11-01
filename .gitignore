@@ -1,0 +1,15 @@
+# ================= Credentials & Private Config =================
+secrets.h
+
+# ================= Backups & Temporary Files =================
+*.bak
+*.tmp
+*~
+
+# ================= IDEs & Build Artifacts =================
+.vscode/
+.idea/
+build/
+*.bin
+*.elf
+*.hex
