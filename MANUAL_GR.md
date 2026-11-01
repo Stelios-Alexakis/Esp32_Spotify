@@ -35,6 +35,10 @@
 
 ## 2. Συνδεσμολογία & Pinout (Hardware)
 
+<p align="center">
+  <img src="Project_Overview.jpg" alt="Hardware Overview & Wiring" width="600">
+</p>
+
 ### Α. Οθόνη TFT 1.8" ST7735 (160x128)
 | Pin Οθόνης | Όνομα | Σύνδεση στο ESP32 | Περιγραφή |
 |---|---|---|---|
@@ -87,6 +91,10 @@ stateDiagram-v2
 ### Κατάσταση 1: Now Playing (Αναπαραγωγή Μουσικής)
 
 Ενεργοποιείται αυτόματα όταν παίζει οποιοδήποτε τραγούδι στο Spotify.
+
+<p align="center">
+  <img src="Spotify_Player.jpg" alt="Spotify Player UI with Album Art" width="360">
+</p>
 
 ```
 ┌────────────────────────────────────────┐
@@ -150,6 +158,10 @@ stateDiagram-v2
 ### Κατάσταση 3: Standby / Screensaver (Ρολόι & Καιρός)
 
 Ενεργοποιείται αυτόματα όταν η μουσική είναι σε παύση για **45 δευτερόλεπτα** ή όταν η εφαρμογή του Spotify είναι κλειστή.
+
+<p align="center">
+  <img src="Clock_function.jpg" alt="Analog Clock & Live Weather Screensaver" width="360">
+</p>
 
 ```
 ┌────────────────────────────────────────┐

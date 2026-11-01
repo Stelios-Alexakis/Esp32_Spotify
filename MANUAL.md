@@ -35,6 +35,10 @@ Complete operations, wiring, and configuration manual for the **ESP32 Spotify Sm
 
 ## 2. Wiring & Pinout (Hardware)
 
+<p align="center">
+  <img src="Project_Overview.jpg" alt="Hardware Overview & Wiring" width="600">
+</p>
+
 ### A. 1.8" ST7735 SPI TFT Display (160x128)
 | Display Pin | Label | ESP32 GPIO | Description |
 |---|---|---|---|
@@ -87,6 +91,10 @@ stateDiagram-v2
 ### Mode 1: Now Playing (Music Playback)
 
 Automatically activates whenever a song is actively playing on your Spotify account.
+
+<p align="center">
+  <img src="Spotify_Player.jpg" alt="Spotify Player UI with Album Art" width="360">
+</p>
 
 ```text
 ┌────────────────────────────────────────┐
@@ -150,6 +158,10 @@ Allows you to browse upcoming tracks and choose playlists directly from the hard
 ### Mode 3: Standby / Screensaver (Clock & Weather)
 
 Automatically activates when playback has been paused for **45 seconds** or when the Spotify app is closed.
+
+<p align="center">
+  <img src="Clock_function.jpg" alt="Analog Clock & Live Weather Screensaver" width="360">
+</p>
 
 ```text
 ┌────────────────────────────────────────┐

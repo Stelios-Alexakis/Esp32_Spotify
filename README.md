@@ -4,6 +4,15 @@ An interactive, physical Spotify desktop controller powered by an **ESP32**, a *
 
 Control your playback, browse your **Queue** and **Playlists**, adjust volume, view **64x64 album art**, and enjoy an analog clock & live weather **screensaver** when idle!
 
+<p align="center">
+  <img src="Project_Overview.jpg" alt="ESP32 Spotify Controller Hardware Overview" width="650">
+</p>
+
+<p align="center">
+  <img src="Spotify_Player.jpg" alt="Spotify Player UI with Album Art" width="320">&nbsp;&nbsp;
+  <img src="Clock_function.jpg" alt="Analog Clock & Weather Screensaver" width="320">
+</p>
+
 ---
 
 ## ✨ Features
