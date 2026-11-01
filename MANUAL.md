@@ -1,98 +1,98 @@
-# 🎵 ESP32 Spotify Smart Hub & Clock — Εγχειρίδιο Χρήσης (Manual)
+# 🎵 ESP32 Spotify Smart Hub & Clock — User Manual
 
-Πλήρες εγχειρίδιο λειτουργίας, συνδεσμολογίας και παραμετροποίησης για το **ESP32 Spotify Hub**.
-
----
-
-## 📑 Πίνακας Περιεχομένων
-1. [Χαρακτηριστικά & Προδιαγραφές](#1-χαρακτηριστικά--προδιαγραφές)
-2. [Συνδεσμολογία & Pinout (Hardware)](#2-συνδεσμολογία--pinout-hardware)
-3. [Οι 3 Καταστάσεις Λειτουργίας (Modes)](#3-οι-3-καταστάσεις-λειτουργίας-modes)
-   - [Κατάσταση 1: Now Playing (Αναπαραγωγή Μουσικής)](#κατάσταση-1-now-playing-αναπαραγωγή-μουσικής)
-   - [Κατάσταση 2: Menu Mode (Ουρά & Playlists)](#κατάσταση-2-menu-mode-ουρά--playlists)
-   - [Κατάσταση 3: Standby / Screensaver (Ρολόι & Καιρός)](#κατάσταση-3-standby--screensaver-ρολόι--καιρός)
-4. [Πλήρης Πίνακας Χειριστηρίων (Master Cheatsheet)](#4-πλήρης-πίνακας-χειριστηρίων-master-cheatsheet)
-5. [Ρύθμιση Spotify for Developers & Scopes](#5-ρύθμιση-spotify-for-developers--scopes)
-6. [Παραμετροποίηση Κώδικα (Configuration)](#6-παραμετροποίηση-κώδικα-configuration)
-7. [Αντιμετώπιση Προβλημάτων (Troubleshooting)](#7-αντιμετώπιση-προβλημάτων-troubleshooting)
+Complete operations, wiring, and configuration manual for the **ESP32 Spotify Smart Hub**.
 
 ---
 
-## 1. Χαρακτηριστικά & Προδιαγραφές
-
-* **Μικροελεγκτής:** ESP32 NodeMCU (30-pin) με ενσωματωμένο Wi-Fi & Bluetooth.
-* **Οθόνη:** 1.8" TFT SPI (ST7735), ανάλυση 160x128 pixels, 65K χρώματα RGB565.
-* **Χειρισμός:** 
-  * Περιστροφικός κωδικοποιητής (Rotary Encoder) με ενσωματωμένο διακόπτη (KY-040).
-  * Μονάδα 4 ανεξάρτητων πλήκτρων (4-Bit Tactile Button Module).
-* **Δικτυακές Λειτουργίες:**
-  * Απευθείας επικοινωνία με το επίσημο **Spotify Web API** μέσω HTTPS.
-  * Αυτόματη λήψη και αποκωδικοποίηση εξωφύλλων άλμπουμ σε πραγματικό χρόνο (JPEG 64x64).
-  * Συγχρονισμός ώρας δικτύου μέσω πρωτοκόλλου **NTP** με αυτόματη αλλαγή θερινής/χειμερινής ώρας (Ελλάδα - EET/EEST).
-  * Αυτόματος εντοπισμός συντεταγμένων πόλης μέσω **Open-Meteo Geocoding** και ανάκτηση ζωντανού καιρού/θερμοκρασίας.
+## 📑 Table of Contents
+1. [Features & Specifications](#1-features--specifications)
+2. [Wiring & Pinout (Hardware)](#2-wiring--pinout-hardware)
+3. [The 3 Operating Modes](#3-the-3-operating-modes)
+   - [Mode 1: Now Playing (Music Playback)](#mode-1-now-playing-music-playback)
+   - [Mode 2: Menu Mode (Queue & Playlists)](#mode-2-menu-mode-queue--playlists)
+   - [Mode 3: Standby / Screensaver (Clock & Weather)](#mode-3-standby--screensaver-clock--weather)
+4. [Master Controls Cheatsheet](#4-master-controls-cheatsheet)
+5. [Spotify for Developers Setup & Scopes](#5-spotify-for-developers-setup--scopes)
+6. [Firmware Configuration](#6-firmware-configuration)
+7. [Troubleshooting Guide](#7-troubleshooting-guide)
 
 ---
 
-## 2. Συνδεσμολογία & Pinout (Hardware)
+## 1. Features & Specifications
 
-### Α. Οθόνη TFT 1.8" ST7735 (160x128)
-| Pin Οθόνης | Όνομα | Σύνδεση στο ESP32 | Περιγραφή |
+* **Microcontroller:** ESP32 NodeMCU (30-pin) with built-in Wi-Fi & Bluetooth.
+* **Display:** 1.8" SPI TFT (ST7735 controller), 160x128 resolution, 65K colors (RGB565).
+* **Physical Controls:** 
+  * Rotary Encoder with integrated push-button switch (KY-040 / EC11).
+  * 4-Bit tactile button module (independent switches).
+* **Network & Cloud Features:**
+  * Direct communication with the official **Spotify Web API** over HTTPS.
+  * Real-time JPEG streaming and decompression of 64x64 album cover art (`TJpg_Decoder`).
+  * Automatic network time synchronization via **NTP** with timezone support.
+  * City geolocation and live weather/temperature reporting via **Open-Meteo API** (no API key required).
+
+---
+
+## 2. Wiring & Pinout (Hardware)
+
+### A. 1.8" ST7735 SPI TFT Display (160x128)
+| Display Pin | Label | ESP32 GPIO | Description |
 |---|---|---|---|
-| Pin 1 | **RST** | **GPIO 22** | Reset οθόνης |
-| Pin 2 | **CS** | **GPIO 5** | Chip Select |
-| Pin 3 | **D/C (A0)** | **GPIO 4** | Data / Command control |
+| Pin 1 | **RST** | **GPIO 22** | Display Hardware Reset |
+| Pin 2 | **CS** | **GPIO 5** | SPI Chip Select |
+| Pin 3 | **D/C (A0)** | **GPIO 4** | Data / Command Control |
 | Pin 4 | **DIN (SDA)** | **GPIO 23** | Hardware VSPI MOSI (Data) |
 | Pin 5 | **CLK (SCK)** | **GPIO 18** | Hardware VSPI SCK (Clock) |
-| Pin 6 | **VCC** | **3.3V ή 5V** | Τροφοδοσία |
-| Pin 7 | **BL (LED)** | **3.3V** | Backlight οθόνης |
-| Pin 8 | **GND** | **GND** | Γείωση |
+| Pin 6 | **VCC** | **3.3V or 5V** | Power Supply |
+| Pin 7 | **BL (LED)** | **3.3V** | Backlight Power |
+| Pin 8 | **GND** | **GND** | Common Ground |
 
-### Β. Rotary Encoder (KY-040)
-| Pin Encoder | Όνομα | Σύνδεση στο ESP32 | Περιγραφή |
+### B. EC11 / KY-040 Rotary Encoder
+| Encoder Pin | Label | ESP32 GPIO | Description |
 |---|---|---|---|
-| CLK | **CLK** | **GPIO 32** | Σήμα Α περιστροφής (Interrupt) |
-| DT | **DT** | **GPIO 33** | Σήμα Β περιστροφής |
-| SW | **SW** | **GPIO 25** | Ενσωματωμένο κουμπί (Push switch) |
-| + | **VCC** | **3.3V** | Τροφοδοσία |
-| GND | **GND** | **GND** | Γείωση |
+| CLK | **CLK (A)** | **GPIO 32** | Quadrature Phase A (Interrupt pin) |
+| DT | **DT (B)** | **GPIO 33** | Quadrature Phase B |
+| SW | **SW** | **GPIO 25** | Push-button Switch |
+| + | **VCC** | **3.3V** | Power Supply |
+| GND | **GND** | **GND** | Common Ground |
 
-### Γ. Μονάδα 4 Πλήκτρων (4-Button Module)
-| Πλήκτρο | Σύνδεση στο ESP32 | Λειτουργία |
+### C. 4-Bit Key Button Module
+| Key Pin | ESP32 GPIO | Default Action |
 |---|---|---|
-| **K1** | **GPIO 26** | **PREV** (Προηγούμενο κομμάτι / Πίσω στο μενού) |
-| **K2** | **GPIO 27** | **PLAY** (Play / Pause / Έξοδος από μενού) |
-| **K3** | **GPIO 14** | **NEXT** (Επόμενο κομμάτι / Scroll κάτω) |
-| **K4** | **GPIO 13** | **SHUF / REPEAT** (Shuffle & Repeat toggle) |
-| **GND** | **GND** | Κοινή γείωση πλήκτρων (Active LOW με εσωτερικό Pull-Up) |
+| **K1** | **GPIO 26** | **PREV** (Short click: Previous Track \| Long press: Restart Track from 0:00) |
+| **K2** | **GPIO 27** | **PLAY** (Toggle Play/Pause \| Back in Menu \| Screensaver Wake-up) |
+| **K3** | **GPIO 14** | **NEXT** (Next Track \| Scroll down) |
+| **K4** | **GPIO 13** | **SHUF / REPEAT** (Short click: Shuffle toggle \| Long press: Repeat mode) |
+| **GND** | **GND** | Common Ground (Active LOW with internal Pull-Up) |
 
 ---
 
-## 3. Οι 3 Καταστάσεις Λειτουργίας (Modes)
+## 3. The 3 Operating Modes
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Standby: Εκκίνηση (Χωρίς αναπαραγωγή)
-    [*] --> NowPlaying: Εκκίνηση (Παίζει μουσική)
+    [*] --> Standby: Startup (No active playback)
+    [*] --> NowPlaying: Startup (Music actively playing)
     
-    NowPlaying --> Standby: Παύση > 45 δευτ.
-    Standby --> NowPlaying: Play από κινητό/PC ή πάτημα κουμπιού
+    NowPlaying --> Standby: Playback paused > 45s
+    Standby --> NowPlaying: Resume playback on phone/PC or press any button
     
     NowPlaying --> MenuMode: Long Press Encoder (>0.7s)
-    MenuMode --> NowPlaying: Πάτημα PLAY ή Επιλογή τραγουδιού ή 15s αδράνεια
+    MenuMode --> NowPlaying: Press PLAY, select song, or 15s idle timeout
     MenuMode --> NowPlaying: Long Press Encoder (>0.7s)
 ```
 
 ---
 
-### Κατάσταση 1: Now Playing (Αναπαραγωγή Μουσικής)
+### Mode 1: Now Playing (Music Playback)
 
-Ενεργοποιείται αυτόματα όταν παίζει οποιοδήποτε τραγούδι στο Spotify.
+Automatically activates whenever a song is actively playing on your Spotify account.
 
-```
+```text
 ┌────────────────────────────────────────┐
-│  ┌──────┐  Τίτλος Τραγουδιού (Marquee) │
-│  │      │  Καλλιτέχνης (Γκρι)          │
-│  │ 64x64│  Άλμπουμ (Κυανό)             │
+│  ┌──────┐  Track Title (Marquee)       │
+│  │      │  Artist Name (Gray)          │
+│  │ 64x64│  Album Name (Cyan)           │
 │  │  Art │                              │
 │  └──────┘  >  S  R1     V:65%          │
 ├────────────────────────────────────────┤
@@ -101,34 +101,34 @@ stateDiagram-v2
 └────────────────────────────────────────┘
 ```
 
-1. **Εξώφυλλο Άλμπουμ (64x64):** Κατεβαίνει απευθείας από τους servers του Spotify σε JPEG και σχεδιάζεται αριστερά στο πλαίσιο.
-2. **Κυλιόμενο Κείμενο (RDS / Marquee):** 
-   * Τίτλος τραγουδιού (Λευκό).
-   * Όνομα καλλιτέχνη (Ανοιχτό γκρι).
-   * Όνομα άλμπουμ (Κυανό).
-   * Αν το κείμενο υπερβαίνει τους 13 χαρακτήρες, κυλάει αυτόματα και ομαλά ανά 600ms.
-3. **Γραμμή Κατάστασης (Status Row):**
-   * `>` = Αναπαραγωγή, `||` = Παύση.
-   * `S` = Shuffle ενεργό.
-   * `R` = Επανάληψη λίστας, `R1` = Επανάληψη τρέχοντος κομματιού.
-   * `V:xx%` = Τρέχουσα ένταση ήχου στο Spotify.
-4. **Μπάρα Προόδου & Χρονόμετρα:**
-   * Πράσινη γραμμή προόδου μήκους 148 pixels.
-   * Χρόνος που πέρασε (αριστερά) και συνολική διάρκεια (δεξιά) σε μορφή `Λ:ΔΔ`.
+1. **Album Art (64x64):** Downloaded directly from Spotify's CDN servers in JPEG format and rendered inside the left border box.
+2. **Scrolling Text (RDS / Marquee):** 
+   * Song Title (White).
+   * Artist Name (Light Gray).
+   * Album Name (Cyan).
+   * Any text exceeding 13 characters scrolls smoothly every 600ms.
+3. **Status Indicators:**
+   * `>` = Playing, `||` = Paused.
+   * `S` = Shuffle active.
+   * `R` = Context/Playlist Repeat, `R1` = Single Track Repeat.
+   * `V:xx%` = Current Spotify volume level.
+4. **Progress Bar & Timers:**
+   * Green progress bar (148 pixels wide).
+   * Elapsed time (left) and total duration (right) formatted as `M:SS`.
 
 ---
 
-### Κατάσταση 2: Menu Mode (Ουρά & Playlists)
+### Mode 2: Menu Mode (Queue & Playlists)
 
-Επιτρέπει την περιήγηση στα επόμενα τραγούδια και τις λίστες σου χωρίς να ανοίξεις το κινητό.
+Allows you to browse upcoming tracks and choose playlists directly from the hardware without opening your phone or computer.
 
-#### Είσοδος & Πλοήγηση
-* **Είσοδος:** Κράτα πατημένο το κουμπί του Rotary Encoder (`ENC_SW`) για **>= 0.7 δευτερόλεπτα** και άφησέ το.
-* **Πλοήγηση:** Περίστρεψε τον encoder δεξιά/αριστερά για να μετακινήσεις τον πράσινο δείκτη `>`.
-* **Επιλογή:** Κάνε ένα σύντομο click στον encoder.
+#### Access & Navigation
+* **Enter:** Hold down the Rotary Encoder button (`ENC_SW`) for **>= 0.7 seconds** and release.
+* **Navigate:** Turn the encoder clockwise/counter-clockwise to move the green cursor `>`.
+* **Select:** Single click the rotary encoder button.
 
-#### Δομή Μενού:
-```
+#### Menu Structure:
+```text
            MENU                        QUEUE - Next Up                    PLAYLISTS
   ─────────────────────────      ─────────────────────────      ─────────────────────────
   > Queue (Next Up)              > Artist 1 - Track A           > Discover Weekly
@@ -139,19 +139,19 @@ stateDiagram-v2
     Rotate + Click=Select          Click=Play  PLAY=Back          Click=Play  PLAY=Back
 ```
 
-* **Queue (Next Up):** Εμφανίζει έως και 25 επόμενα τραγούδια που περιμένουν στην ουρά. Κάνοντας κλικ σε ένα τραγούδι, το hub μεταπηδά άμεσα σε αυτό χωρίς να σβήνει την ενεργή λίστα ή την ουρά!
-* **Playlists:** Εμφανίζει έως και 25 playlists του προφίλ σου (με scrollbar). Κάνοντας κλικ σε μια λίστα, ξεκινά άμεσα η αναπαραγωγή ολόκληρης της playlist!
-* **Κύλιση Τίτλων (Marquee):** Το αντικείμενο στο οποίο βρίσκεται ο δείκτης `>` κυλάει αυτόματα οριζόντια αν ο τίτλος του υπερβαίνει τους 23 χαρακτήρες, επιτρέποντας την πλήρη ανάγνωση ολόκληρου του ονόματος του τραγουδιού ή της playlist!
-* **Επιστροφή:** Πάτα **PREV (K1)** για επιστροφή στο προηγούμενο μενού.
-* **Έξοδος:** Πάτα **PLAY (K2)** ή κράτα πατημένο τον encoder για άμεση επιστροφή στην αναπαραγωγή (επίσης κλείνει αυτόματα μετά από 15 δευτερόλεπτα αδράνειας).
+* **Queue (Next Up):** Shows up to 25 upcoming tracks waiting in your playback queue. Clicking any song immediately skips to that track without clearing your active queue or context!
+* **Playlists:** Displays up to 25 playlists from your user library (with visual scrollbar). Clicking a playlist initiates immediate playback of that playlist!
+* **Item Marquee Scrolling:** The currently selected item with the `>` cursor scrolls automatically if its title exceeds 23 characters, ensuring full readability of long names.
+* **Back:** Press **K1 (PREV)** to go back to the previous menu level.
+* **Exit:** Press **K2 (PLAY)** or hold the encoder button to immediately return to the Now Playing screen (also automatically exits after 15 seconds of inactivity).
 
 ---
 
-### Κατάσταση 3: Standby / Screensaver (Ρολόι & Καιρός)
+### Mode 3: Standby / Screensaver (Clock & Weather)
 
-Ενεργοποιείται αυτόματα όταν η μουσική είναι σε παύση για **45 δευτερόλεπτα** ή όταν η εφαρμογή του Spotify είναι κλειστή.
+Automatically activates when playback has been paused for **45 seconds** or when the Spotify app is closed.
 
-```
+```text
 ┌────────────────────────────────────────┐
 │                   12                   │
 │               \        /               │
@@ -168,71 +168,71 @@ stateDiagram-v2
 └────────────────────────────────────────┘
 ```
 
-1. **Αναλογικό Ρολόι (Zero-Flicker):**
-   * Στρογγυλό καντράν με 12 χαραγμένες ενδείξεις ωρών (μεγαλύτερες στο 12, 3, 6, 9).
-   * **Ωροδείκτης:** Λευκός (`UI_WHITE`).
-   * **Λεπτοδείκτης:** Κυανός (`UI_CYAN`).
-   * **Δευτερολεπτοδείκτης:** Πράσινος Spotify (`UI_GREEN`).
-   * Ανανεώνεται κάθε δευτερόλεπτο σβήνοντας μόνο τις προηγούμενες γραμμές δεικτών, εξασφαλίζοντας απόλυτα ομαλή κίνηση χωρίς τρεμόπαιγμα της οθόνης.
-2. **Ημερομηνία:** Ακριβής ημερομηνία συγχρονισμένη αυτόματα από το ίντερνετ (NTP Server) με υποστήριξη ελληνικής ώρας.
-3. **Τοποθεσία & Θερμοκρασία:** Εμφάνιση της πόλης σου και της τρέχουσας θερμοκρασίας σε Spotify Green (π.χ. `Kozani  12 °C`).
-4. **Συνθήκες Καιρού:** Περιγραφή καιρικής κατάστασης (π.χ. `Clear Sky`, `Partly Cloudy`, `Overcast`, `Light Drizzle`, `Rainy`).
-5. **Αφύπνιση (Wake-up):**
-   * **Αυτόματα:** Μόλις πατήσεις Play από το κινητό, το tablet ή το PC σου, το ESP32 το αντιλαμβάνεται σε <3.5 δευτερόλεπτα και γυρνάει αμέσως στην οθόνη του άλμπουμ!
-   * **Χειροκίνητα:** Πατώντας οποιοδήποτε κουμπί ή περιστρέφοντας τον encoder.
+1. **Zero-Flicker Analog Clock:**
+   * Circular dial with 12 hour tick marks (accented markers at 12, 3, 6, 9).
+   * **Hour Hand:** White (`UI_WHITE`).
+   * **Minute Hand:** Cyan (`UI_CYAN`).
+   * **Second Hand:** Spotify Green (`UI_GREEN`).
+   * Efficiently erases only previous hand positions every second, providing flicker-free movement.
+2. **Current Date:** Accurate calendar date synchronized via NTP internet servers.
+3. **Location & Temperature:** Displays your configured city and real-time temperature in Spotify Green (e.g. `Kozani  12 °C`).
+4. **Weather Condition:** Textual description of current weather (e.g. `Clear Sky`, `Partly Cloudy`, `Overcast`, `Light Drizzle`, `Rainy`).
+5. **Wake-up Mechanisms:**
+   * **Automatic:** Resuming playback from your phone, tablet, or PC wakes the ESP32 in under 3.5 seconds!
+   * **Manual:** Pressing any hardware button or rotating the encoder.
 
 ---
 
-## 4. Πλήρης Πίνακας Χειριστηρίων (Master Cheatsheet)
+## 4. Master Controls Cheatsheet
 
-| Χειριστήριο | Ενέργεια | Στην Αναπαραγωγή (Now Playing) | Μέσα στο Μενού (Menu Mode) | Στο Screensaver (Ρολόι) |
+| Control Input | Action | Now Playing Mode | Menu Mode | Screensaver (Standby) |
 |---|---|---|---|---|
-| **Rotary Encoder** | **Περιστροφή Δεξιά** | Αύξηση έντασης Spotify (+2%) | Κύλιση προς τα κάτω (`>`) | Αφύπνιση & αύξηση έντασης |
-| **Rotary Encoder** | **Περιστροφή Αριστερά** | Μείωση έντασης Spotify (-2%) | Κύλιση προς τα πάνω (`>`) | Αφύπνιση & μείωση έντασης |
-| **Rotary Button (ENC_SW)** | **Σύντομο Click (<0.7s)** | **Mute / Unmute** (Επαναφορά έντασης) | **Επιλογή / Play** | Αφύπνιση |
-| **Rotary Button (ENC_SW)** | **Long Press (>=0.7s)** | **Άνοιγμα Μενού** (Queue/Playlists) | **Έξοδος από Μενού** | Αφύπνιση |
-| **Κουμπί K1 (PREV)** | **Σύντομο Click (<0.5s)** | Προηγούμενο κομμάτι | Πίσω στο προηγούμενο μενού | Αφύπνιση & Previous track |
-| **Κουμπί K1 (PREV)** | **Long Press (>=0.5s)** | **Επανεκκίνηση τραγουδιού από την αρχή (0:00)** | — | Αφύπνιση & Restart track |
-| **Κουμπί K2 (PLAY)** | **Πάτημα** | **Play / Pause** toggle | **Έξοδος** στην οθόνη τραγουδιού | Αφύπνιση & Play |
-| **Κουμπί K3 (NEXT)** | **Πάτημα** | Επόμενο κομμάτι | Κύλιση προς τα κάτω | Αφύπνιση & Next track |
-| **Κουμπί K4 (SHUF)** | **Σύντομο Click (<0.5s)** | **Shuffle** On / Off | — | Αφύπνιση & Shuffle |
-| **Κουμπί K4 (SHUF)** | **Long Press (>=0.5s)** | **Repeat**: Off -> List (`R`) -> Track (`R1`) | — | Αφύπνιση & Repeat |
+| **Rotary Encoder** | **Rotate Right** | Increase Spotify Volume (+2%) | Scroll Down (`>`) | Wake up & increase volume |
+| **Rotary Encoder** | **Rotate Left** | Decrease Spotify Volume (-2%) | Scroll Up (`>`) | Wake up & decrease volume |
+| **Encoder Button (ENC_SW)** | **Short Click (<0.7s)** | **Mute / Unmute** (Restores volume) | **Select / Play item** | Wake up display |
+| **Encoder Button (ENC_SW)** | **Long Press (>=0.7s)** | **Open Menu** (Queue/Playlists) | **Exit Menu** to playback | Wake up display |
+| **Button K1 (PREV)** | **Short Click (<0.5s)** | Skip to Previous Track | Back to parent menu | Wake up & Previous track |
+| **Button K1 (PREV)** | **Long Press (>=0.5s)** | **Restart Song from 0:00** | — | Wake up & Restart track |
+| **Button K2 (PLAY)** | **Click** | **Play / Pause** toggle | **Exit** to Now Playing | Wake up & Play |
+| **Button K3 (NEXT)** | **Click** | Skip to Next Track | Scroll Down | Wake up & Next track |
+| **Button K4 (SHUF)** | **Short Click (<0.5s)** | **Shuffle** On / Off | — | Wake up & Shuffle |
+| **Button K4 (SHUF)** | **Long Press (>=0.5s)** | **Repeat**: Off ➔ Context (`R`) ➔ Track (`R1`) | — | Wake up & Repeat |
 
 ---
 
-## 5. Ρύθμιση Spotify for Developers & Scopes
+## 5. Spotify for Developers Setup & Scopes
 
-Για να μπορεί το hub να διαβάζει την ουρά αναπαραγωγής και τις λίστες, η εφαρμογή σου στο Spotify Developer Dashboard πρέπει να έχει τα κατάλληλα δικαιώματα.
+To enable queue browsing and playlist playback, your Spotify Developer App must be configured with appropriate OAuth permission scopes.
 
-### Α. Ρυθμίσεις Dashboard
-1. Συνδέσου στο [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-2. Άνοιξε την εφαρμογή σου και πάτα **Settings**.
-3. Στο πεδίο **Redirect URIs**, πρόσθεσε το: `http://localhost:8888/callback` και πάτα **Save**.
+### A. Dashboard Setup
+1. Log in to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
+2. Open your registered App and click **Settings**.
+3. Under **Redirect URIs**, add: `http://localhost:8888/callback` and click **Save**.
 
-### Β. Λίστα Απαιτούμενων Scopes
-* `user-read-playback-state` (Ανάγνωση κατάστασης & ουράς)
-* `user-modify-playback-state` (Έλεγχος play, pause, έντασης, αλλαγή κομματιού)
-* `user-read-currently-playing` (Ανάγνωση τρέχοντος κομματιού & εξωφύλλου)
-* `playlist-read-private` (Ανάγνωση ιδιωτικών playlists)
-* `playlist-read-collaborative` (Ανάγνωση συνεργατικών playlists)
+### B. Required Scopes List
+* `user-read-playback-state` (Read playback state & queue)
+* `user-modify-playback-state` (Control playback: play, pause, volume, seek, next/prev)
+* `user-read-currently-playing` (Read current track & album art URL)
+* `playlist-read-private` (Read user's private playlists)
+* `playlist-read-collaborative` (Read collaborative playlists)
 
-### Γ. Έκδοση Νέου Refresh Token (2 Βήματα)
+### C. Generating a New Refresh Token (2 Steps)
 
-#### Βήμα 1: Έγκριση στον Browser
-Άνοιξε στον browser τον παρακάτω σύνδεσμο αντικαθιστώντας το `YOUR_CLIENT_ID` με το Client ID σου:
+#### Step 1: Authorization in Browser
+Paste the following URL into your web browser, replacing `YOUR_CLIENT_ID` with your actual Client ID:
 ```text
 https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=http://localhost:8888/callback&scope=user-read-playback-state%20user-modify-playback-state%20user-read-currently-playing%20playlist-read-private%20playlist-read-collaborative
 ```
-Πάτα **Agree**. Ο browser θα σε ανακατευθύνει σε μια διεύθυνση που ξεκινά με:
+Click **Agree**. The browser will redirect to an address starting with:
 `http://localhost:8888/callback?code=AQD...`
-**Αντίγραψε τον κωδικό** μετά το `code=`.
+**Copy the code** value after `code=`.
 
-#### Βήμα 2: Λήψη Token μέσω PowerShell
-Άνοιξε το PowerShell στα Windows και τρέξε:
+#### Step 2: Request Token via PowerShell
+Open PowerShell on your computer and run:
 ```powershell
 $clientId = "YOUR_CLIENT_ID"
 $clientSecret = "YOUR_CLIENT_SECRET"
-$authCode = "ΕΔΩ_ΚΑΝΕ_PASTE_ΤΟΝ_ΚΩΔΙΚΟ_ΑΠΟ_ΤΟ_ΒΗΜΑ_1"
+$authCode = "PASTE_THE_CODE_FROM_STEP_1_HERE"
 $redirectUri = "http://localhost:8888/callback"
 
 $authHeader = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$($clientId):$($clientSecret)"))
@@ -248,48 +248,41 @@ $response = Invoke-RestMethod -Uri "https://accounts.spotify.com/api/token" -Met
 
 $response.refresh_token
 ```
-Αντίγραψε το αλφαριθμητικό που θα εμφανιστεί και βάλ' το στη μεταβλητή `REFRESH_TOKEN` στον κώδικα!
+Copy the long string returned and set it as `SECRET_REFRESH_TOKEN` in your `secrets.h` file!
 
 ---
 
-## 6. Παραμετροποίηση Κώδικα (Configuration)
+## 6. Firmware Configuration
 
-Στην αρχή του αρχείου [`Esp_Spotify.ino`](file:///C:/Users/lolto/Downloads/Esp_Spotify/Esp_Spotify.ino) υπάρχουν οι κύριες ρυθμίσεις χρήστη:
+All user credentials and personal preferences are managed inside `secrets.h` (created from `secrets.h.example`):
 
 ```cpp
-// 1. Στοιχεία Wi-Fi
-const char* WIFI_SSID     = "ΤΟ_WIFI_ΣΟΥ";
-const char* WIFI_PASSWORD = "Ο_ΚΩΔΙΚΟΣ_ΣΟΥ";
+#define SECRET_WIFI_SSID     "YOUR_WIFI_SSID"
+#define SECRET_WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
 
-// 2. Spotify API Credentials
-const char* CLIENT_ID     = "YOUR_CLIENT_ID";
-const char* CLIENT_SECRET = "YOUR_CLIENT_SECRET";
-const char* REFRESH_TOKEN = "YOUR_REFRESH_TOKEN";
+#define SECRET_CLIENT_ID     "YOUR_SPOTIFY_CLIENT_ID"
+#define SECRET_CLIENT_SECRET "YOUR_SPOTIFY_CLIENT_SECRET"
+#define SECRET_REFRESH_TOKEN "YOUR_SPOTIFY_REFRESH_TOKEN"
 
-// 3. Πόλη για τον Καιρό (στα Αγγλικά)
-const char* CITY_NAME     = "Kozani"; // π.χ. "Kozani", "Thessaloniki", "Athens"
-
-// 4. Χρόνοι Αναμονής (σε χιλιοστά του δευτερολέπτου)
-const unsigned long IDLE_TIMEOUT_MS = 45000; // 45 δευτερόλεπτα παύσης για να μπει το Ρολόι
-const unsigned long MENU_TIMEOUT_MS = 15000; // 15 δευτερόλεπτα αδράνειας για έξοδο από το Μενού
+#define SECRET_CITY_NAME     "Athens" // E.g., "London", "New York" or leave "" for IP geolocation
 ```
 
 ---
 
-## 7. Αντιμετώπιση Προβλημάτων (Troubleshooting)
+## 7. Troubleshooting Guide
 
-### ❌ Σφάλμα Upload στο Arduino IDE (`COM port busy or doesn't exist / Code 43`)
-* **Αιτία:** Τα Windows έχασαν στιγμιαία την επικοινωνία με το τσιπ CH340 λόγω κουνήματος του καλωδίου USB ή πτώσης τάσης.
-* **Λύση:** Αποσύνδεσε το καλώδιο USB από το PC, περίμενε 3 δευτερόλεπτα και ξανασύνδεσέ το (ιδανικά σε απευθείας θύρα USB στο πίσω μέρος του υπολογιστή). Βεβαιώσου στο `Tools -> Port` ότι είναι επιλεγμένο το σωστό COM port.
+### ❌ Arduino IDE Upload Failure (`COM port busy or doesn't exist / Code 43`)
+* **Cause:** USB connection reset or voltage drop on the CH340 / CP2102 chip.
+* **Fix:** Unplug the USB cable from your computer, wait 3 seconds, and reconnect (preferably to a motherboard rear USB port). Confirm the correct port in `Tools -> Port`.
 
-### ❌ Στο μενού εμφανίζεται `Scope Error: Token`
-* **Αιτία:** Το Refresh Token σου εκδόθηκε χωρίς τα scopes για ανάγνωση ουράς ή playlists.
-* **Λύση:** Ακολούθησε τα βήματα στην [Ενότητα 5](#5-ρύθμιση-spotify-for-developers--scopes) για να εκδώσεις νέο Token με πλήρη δικαιώματα.
+### ❌ Menu shows `Scope Error: Token`
+* **Cause:** The Refresh Token in use was created without queue or playlist permissions.
+* **Fix:** Re-run [Section 5](#5-spotify-for-developers-setup--scopes) to obtain a new token with all required scopes.
 
-### ❌ Η οθόνη δεν ανάβει ή μένει άσπρη
-* **Αιτία:** Κακή επαφή στα καλώδια SPI ή ανεπαρκής τροφοδοσία.
-* **Λύση:** Έλεγξε ότι το pin `BL` (Backlight) της οθόνης είναι συνδεδεμένο στα 3.3V και ότι τα pins `CLK` (D18) και `DIN` (D23) κάνουν καλή επαφή στο breadboard.
+### ❌ Display is blank or stays all white
+* **Cause:** Poor wiring connection on the SPI bus or missing backlight power.
+* **Fix:** Ensure the `BL` (Backlight) pin is firmly connected to 3.3V, and check `CLK` (GPIO 18) and `DIN` (GPIO 23) jumper cables.
 
-### ❌ Ο καιρός δείχνει λάθος πόλη ή θερμοκρασία
-* **Αιτία:** Αν το `CITY_NAME` είναι κενό `""`, το ESP32 προσπαθεί να μαντέψει την τοποθεσία μέσω της IP του παρόχου σου (η οποία συχνά δρομολογείται από άλλη πόλη).
-* **Λύση:** Συμπλήρωσε την πόλη σου στο `CITY_NAME = "Kozani";` στη γραμμή 22 του κώδικα. Το ESP32 θα βρει αυτόματα τις ακριβείς συντεταγμένες της πόλης μέσω Open-Meteo Geocoding.
+### ❌ Weather shows the wrong city or temperature
+* **Cause:** When `SECRET_CITY_NAME` is left empty `""`, IP-based geolocation can route through your ISP's regional gateway city.
+* **Fix:** Define your city explicitly in `secrets.h`: `#define SECRET_CITY_NAME "YourCity"`. The ESP32 will automatically fetch exact coordinates using Open-Meteo Geocoding.

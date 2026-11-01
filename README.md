@@ -137,8 +137,9 @@ cd Esp_Spotify
 ---
 
 ## 📖 Detailed Documentation
-For an in-depth guide covering hardware pinouts, troubleshooting common Spotify API errors, token generation, and firmware details, refer to:
-👉 **[Full Greek User Manual (MANUAL.md)](MANUAL.md)**
+For in-depth guides covering hardware pinouts, troubleshooting common Spotify API errors, token generation, and firmware details, refer to:
+- 👉 **[English User Manual (MANUAL.md)](MANUAL.md)**
+- 👉 **[Ελληνικό Εγχειρίδιο Χρήσης (MANUAL_GR.md)](MANUAL_GR.md)**
 
 ---
 
