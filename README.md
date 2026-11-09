@@ -1,4 +1,4 @@
-# 🎵 ESP32 Spotify Controller (Car Thing Alternative)
+# 🎵 ESP32 Spotify Controller 
 
 An interactive, physical Spotify desktop controller powered by an **ESP32**, a **1.8" ST7735 SPI TFT display**, an **EC11 rotary encoder**, and a **4-button module**.
 
